@@ -1,0 +1,48 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: P@ssW0rd
+      MYSQL_DATABASE: clientdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - mynet
+
+  server:
+    build:
+      context: ./Server
+    container_name: api-server
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: mysql://user:user_password@db/clientdb
+    depends_on:
+      - db
+    networks:
+      - mynet
+
+  frontend:
+    build:
+      context: ./Client
+    container_name: react-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+    networks:
+      - mynet
+
+volumes:
+  db_data:
+
+networks:
+  mynet:
