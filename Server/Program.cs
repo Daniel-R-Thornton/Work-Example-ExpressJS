@@ -15,6 +15,18 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
+//disable cors
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
 
 
 
@@ -29,6 +41,7 @@ if (app.Environment.IsDevelopment())
 }
 
 
+app.UseCors("AllowSpecificOrigins");
 app.UseHttpsRedirection();
 app.MapControllers();
 
