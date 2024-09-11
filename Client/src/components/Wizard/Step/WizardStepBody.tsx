@@ -40,54 +40,83 @@ function WizardStepBody<T>({
   );
 }
 
+/**
+ * @function renderProperties
+ * @description Renders a Wizard step property into a labeled input field.
+ * @param {WizardProperty<T>[]} properties The properties to render.
+ * @param {T} wizardData The data object used in the renderBody function.
+ * @param {(name: keyof T, value: string) => void} onChange Function called when a value changes.
+ * @param {(name: keyof T, value: string) => void} onDateChange Function called when a date value changes.
+ * @param {Map<keyof T, string>} errors Map of errors for the step.
+ * @returns {JSX.Element[]} The rendered content of the step.
+ */
 function renderProperties<T>(
   properties: WizardProperty<T>[],
   wizardData: T,
   onChange: (name: keyof T, value: string) => void,
   onDateChange: (name: keyof T, value: string) => void,
   errors: Map<keyof T, string>
-) {
-  return properties.map((prop) => (
-    <div key={prop.name.toString()} className={styles["wizard-field"]}>
-      <label>
-        {prop.label}
-        {prop.required && (
-          <span className={styles["required-asterisk"]}>*</span>
+): JSX.Element[] {
+  return properties.map((prop) => {
+    const { name, inputType, label, required, options } = prop;
+
+    const value = wizardData[name] as
+      | string
+      | number
+      | readonly string[]
+      | undefined;
+
+    const renderInput = () => {
+      switch (inputType) {
+        case "select":
+          return (
+            <select
+              value={value}
+              onChange={(e) => onChange(name, e.target.value)}
+            >
+              <option value="">Select an option</option>
+              {options?.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          );
+        case "date":
+          return (
+            <input
+              type="date"
+              value={
+                value instanceof Date ? value.toISOString().split("T")[0] : ""
+              }
+              onChange={(e) => onDateChange(name, e.target.value)}
+            />
+          );
+        default:
+          return (
+            <input
+              type={inputType}
+              placeholder={label}
+              value={value || ""}
+              onChange={(e) => onChange(name, e.target.value)}
+            />
+          );
+      }
+    };
+
+    return (
+      <div key={name as string} className={styles["wizard-field"]}>
+        <label>
+          {label}
+          {required && <span className={styles["required-asterisk"]}>*</span>}
+        </label>
+        {renderInput()}
+        {errors.get(name) && (
+          <p className={styles["error-message"]}>{errors.get(name)}</p>
         )}
-      </label>
-      {prop.inputType === "select" ? (
-        <select
-          value={(wizardData[prop.name] as string) || ""}
-          onChange={(e) => onChange(prop.name, e.target.value)}
-        >
-          <option value="">Select an option</option>
-          {prop.options?.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      ) : prop.inputType === "date" ? (
-        <input
-          type="date"
-          value={
-            (wizardData[prop.name] as Date)?.toISOString()?.split("T")[0] ?? ""
-          }
-          onChange={(e) => onDateChange(prop.name, e.target.value)}
-        />
-      ) : (
-        <input
-          type={prop.inputType}
-          placeholder={prop.label}
-          value={(wizardData[prop.name] as string) || ""}
-          onChange={(e) => onChange(prop.name, e.target.value)}
-        />
-      )}
-      {errors.get(prop.name) && (
-        <p className={styles["error-message"]}>{errors.get(prop.name)}</p>
-      )}
-    </div>
-  ));
+      </div>
+    );
+  });
 }
 
 export default WizardStepBody;
