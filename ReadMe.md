@@ -104,3 +104,17 @@ dotnet --version
 6. **Consult Logs**: If you encounter any errors during the migration process, consult the logs for detailed error messages. These logs can usually be found in the `Logs` directory of your project or configured logging output.
 
 By following these steps, you can manually apply migrations and address any issues related to database connectivity or initialization. If problems persist, consider reviewing your database configuration and connection settings.
+
+## Assumptions taken:
+
+### No Authorisation
+
+    The api is not validating requests tokens and is not running with authentication or authorisation, for this to be used in a professional setting this would obviously be required, however this has been omitted for the sake of brevity.
+
+### No Pagination
+
+    To keep the implementation and review of the code quick and easy to do queries to not currently support paginination. This means that should you add more Clients or Funding Types the api will only return a fixed amount.
+
+### Database Initialisation
+
+    To keep the application easy to setup and get running migrations run automatically the first time you run the application, this creates the tables in the database as well as all of the default funding types.
