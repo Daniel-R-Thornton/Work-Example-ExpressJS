@@ -9,5 +9,8 @@ namespace Server.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        // Navigation property for the relationship (a funding source can have many clients)
+        public ICollection<Client> Clients { get; set; }
+
     }
 }
