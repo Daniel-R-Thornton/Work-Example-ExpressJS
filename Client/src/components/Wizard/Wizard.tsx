@@ -7,6 +7,7 @@ export interface WizardProps<T> {
   onFinish: (data: T) => void;
   width?: string;
   height?: string;
+  onCancel: () => void;
 }
 
 export interface WizardStep<T> {
@@ -21,6 +22,7 @@ export interface WizardProperty<T> {
   inputType: "text" | "number" | "select" | "date";
   label: string;
   options?: string[];
+  required?: boolean;
 }
 
 // Main Wizard Component
@@ -30,17 +32,43 @@ export function Wizard<T>({
   onFinish,
   showWizard,
   steps,
+  onCancel,
 }: WizardProps<T>) {
   const [currentStep, setCurrentStep] = useState(0);
   const [wizardData, setWizardData] = useState<T>({} as T);
+  const [errors, setErrors] = useState<Map<keyof T, string>>(new Map());
 
   if (!showWizard) return null;
 
+  const validateStep = () => {
+    const stepProperties = steps[currentStep]?.properties || [];
+    const newErrors = new Map<keyof T, string>();
+
+    stepProperties.forEach((prop) => {
+      if (prop.required) {
+        const value = wizardData[prop.name];
+        if (
+          value === undefined ||
+          value === "" ||
+          (prop.inputType === "date" &&
+            new Date(value as string).toString() === "Invalid Date")
+        ) {
+          newErrors.set(prop.name, `${prop.label} is required`);
+        }
+      }
+    });
+
+    setErrors(newErrors);
+    return newErrors.size === 0;
+  };
+
   const handleNext = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep((prevStep) => prevStep + 1);
-    } else {
-      onFinish(wizardData);
+    if (validateStep()) {
+      if (currentStep < steps.length - 1) {
+        setCurrentStep((prevStep) => prevStep + 1);
+      } else {
+        onFinish(wizardData);
+      }
     }
   };
 
@@ -57,17 +85,39 @@ export function Wizard<T>({
     }));
   };
 
+  const handleDateChange = (name: keyof T, value: string) => {
+    const date = new Date(value);
+    setWizardData((prevData) => ({
+      ...prevData,
+      [name]: date, // Store date in DATE format
+    }));
+  };
+
   const currentStepData = steps[currentStep];
   const isLastStep = currentStep === steps.length - 1;
 
   return (
-    <dialog open={showWizard} className={styles["wizard-overlay"]}>
-      <div className={styles["wizard-content"]} style={{ width, height }}>
-        <StepHeader step={currentStepData} stepIndex={currentStep} />
+    <dialog
+      open={showWizard}
+      className={styles["wizard-overlay"]}
+      onClick={onCancel}
+    >
+      <div
+        className={styles["wizard-content"]}
+        style={{ width, height }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <StepHeader
+          step={currentStepData}
+          stepIndex={currentStep}
+          onCancel={onCancel}
+        />
         <StepBody
           step={currentStepData}
           wizardData={wizardData}
           onChange={handleChange}
+          onDateChange={handleDateChange}
+          errors={errors}
         />
         <StepFooter
           isLastStep={isLastStep}
@@ -84,14 +134,19 @@ export function Wizard<T>({
 function StepHeader<T>({
   step,
   stepIndex,
+  onCancel,
 }: {
   step: WizardStep<T>;
   stepIndex: number;
+  onCancel: () => void;
 }) {
   return (
     <header className={styles["wizard-header"]}>
       <h2>{`Step ${stepIndex + 1}`}</h2>
       <div>{step.icon}</div>
+      <button title="Cancel" onClick={onCancel}>
+        ❌
+      </button>
     </header>
   );
 }
@@ -101,17 +156,27 @@ function StepBody<T>({
   step,
   wizardData,
   onChange,
+  onDateChange,
+  errors,
 }: {
   step: WizardStep<T>;
   wizardData: T;
   onChange: (name: keyof T, value: string) => void;
+  onDateChange: (name: keyof T, value: string) => void;
+  errors: Map<keyof T, string>;
 }) {
   return (
     <main className={styles["wizard-body"]}>
       {step.title}
       {step.renderBody && step.renderBody(wizardData)}
       {step.properties &&
-        renderProperties(step.properties, wizardData, onChange)}
+        renderProperties(
+          step.properties,
+          wizardData,
+          onChange,
+          onDateChange,
+          errors
+        )}
     </main>
   );
 }
@@ -120,11 +185,18 @@ function StepBody<T>({
 function renderProperties<T>(
   properties: WizardProperty<T>[],
   wizardData: T,
-  onChange: (name: keyof T, value: string) => void
+  onChange: (name: keyof T, value: string) => void,
+  onDateChange: (name: keyof T, value: string) => void,
+  errors: Map<keyof T, string>
 ) {
   return properties.map((prop) => (
     <div key={prop.name.toString()} className={styles["wizard-field"]}>
-      <label>{prop.label}</label>
+      <label>
+        {prop.label}
+        {prop.required && (
+          <span className={styles["required-asterisk"]}>*</span>
+        )}
+      </label>
       {prop.inputType === "select" ? (
         <select
           value={(wizardData[prop.name] as string) || ""}
@@ -137,6 +209,12 @@ function renderProperties<T>(
             </option>
           ))}
         </select>
+      ) : prop.inputType === "date" ? (
+        <input
+          type="date"
+          value={(wizardData[prop.name] as Date)?.toISOString().split("T")[0]}
+          onChange={(e) => onDateChange(prop.name, e.target.value)}
+        />
       ) : (
         <input
           type={prop.inputType}
@@ -144,6 +222,9 @@ function renderProperties<T>(
           value={(wizardData[prop.name] as string) || ""}
           onChange={(e) => onChange(prop.name, e.target.value)}
         />
+      )}
+      {errors.get(prop.name) && (
+        <p className={styles["error-message"]}>{errors.get(prop.name)}</p>
       )}
     </div>
   ));

@@ -124,3 +124,18 @@
     transform: scale(1);
   }
 }
+
+.wizard-next:disabled {
+  background-color: #c6c6c6;
+  cursor: not-allowed;
+}
+
+.required-asterisk {
+  color: red;
+  margin-left: 4px;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.875rem;
+}
