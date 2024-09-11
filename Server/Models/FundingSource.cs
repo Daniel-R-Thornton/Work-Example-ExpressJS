@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace Server.Models
 {
@@ -9,7 +6,8 @@ namespace Server.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        // Navigation property for the relationship (a funding source can have many clients)
+        // Navigation property for the relationship (a funding source can have many clients) internal only 
+        [JsonIgnore]
         public ICollection<Client> Clients { get; set; }
 
     }

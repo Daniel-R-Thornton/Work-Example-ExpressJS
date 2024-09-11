@@ -22,7 +22,7 @@ services:
       context: ./Server
     container_name: api-server
     ports:
-      - "3000:3000"
+      - "8080:8080"
     environment:
       DATABASE_URL: mysql://user:user_password@db/clientdb
     depends_on:
