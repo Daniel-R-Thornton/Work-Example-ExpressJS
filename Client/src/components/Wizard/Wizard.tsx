@@ -1,16 +1,9 @@
 import React, { useState } from "react";
 import styles from "./Wizard.module.css"; // Import the CSS module
+import WizardStepFooter from "./Step/WizardStepFooter";
+import WizardStepHeader from "./Step/WizardStepHeader";
+import WizardStepBody from "./Step/WizardStepBody";
 
-/**
- * Wizard component properties
- *
- * @prop {boolean} showWizard - Whether or not to show the wizard
- * @prop {WizardStep<T>[]} steps - Array of wizard steps
- * @prop {(data: T) => void} onFinish - Function to call when the wizard is finished
- * @prop {string} [width=500px] - Width of the wizard
- * @prop {string} [height=auto] - Height of the wizard
- * @prop {() => void} onCancel - Function to call when the wizard is cancelled
- */
 export interface WizardProps<T> {
   showWizard: boolean;
   steps: WizardStep<T>[];
@@ -20,14 +13,6 @@ export interface WizardProps<T> {
   onCancel: () => void;
 }
 
-/**
- * Individual wizard step properties
- *
- * @prop {React.ReactNode} title - Title to display in the header
- * @prop {React.ReactNode} icon - Icon to display in the header
- * @prop {WizardProperty<T>[]} [properties] - Array of properties to display in the body
- * @prop {(data: T) => React.ReactNode} [renderBody] - Function to call to render the body
- */
 export interface WizardStep<T> {
   title: React.ReactNode;
   icon: React.ReactNode;
@@ -35,24 +20,14 @@ export interface WizardStep<T> {
   renderBody?: (data: T) => React.ReactNode;
 }
 
-/**
- * Individual property properties
- *
- * @prop {keyof T} name - Name of the property
- * @prop {"text" | "number" | "select" | "date"} inputType - Type of input to display
- * @prop {string} label - Label to display next to the input
- * @prop {string[]} [options] - Options to display in a select input
- * @prop {boolean} [required] - Whether or not the property is required
- */
 export interface WizardProperty<T> {
   name: keyof T;
   inputType: "text" | "number" | "select" | "date";
   label: string;
-  options?: string[];
+  options?: { value: string; label: string }[];
   required?: boolean;
 }
 
-// Main Wizard Component
 export function Wizard<T>({
   width = "500px",
   height = "auto",
@@ -77,8 +52,7 @@ export function Wizard<T>({
         if (
           value === undefined ||
           value === "" ||
-          (prop.inputType === "date" &&
-            new Date(value as string).toString() === "Invalid Date")
+          (prop.inputType === "date" && !isValidDate(value as string))
         ) {
           newErrors.set(prop.name, `${prop.label} is required`);
         }
@@ -87,6 +61,11 @@ export function Wizard<T>({
 
     setErrors(newErrors);
     return newErrors.size === 0;
+  };
+
+  const isValidDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return !isNaN(date.getTime());
   };
 
   const handleNext = () => {
@@ -113,10 +92,10 @@ export function Wizard<T>({
   };
 
   const handleDateChange = (name: keyof T, value: string) => {
-    const date = new Date(value);
+    const date = value ? new Date(value) : undefined;
     setWizardData((prevData) => ({
       ...prevData,
-      [name]: date, // Store date in DATE format
+      [name]: date,
     }));
   };
 
@@ -134,19 +113,19 @@ export function Wizard<T>({
         style={{ width, height }}
         onClick={(e) => e.stopPropagation()}
       >
-        <StepHeader
+        <WizardStepHeader
           step={currentStepData}
           stepIndex={currentStep}
           onCancel={onCancel}
         />
-        <StepBody
+        <WizardStepBody
           step={currentStepData}
           wizardData={wizardData}
           onChange={handleChange}
           onDateChange={handleDateChange}
           errors={errors}
         />
-        <StepFooter
+        <WizardStepFooter
           isLastStep={isLastStep}
           onBack={handleBack}
           onNext={handleNext}
@@ -154,136 +133,6 @@ export function Wizard<T>({
         />
       </div>
     </dialog>
-  );
-}
-
-// StepHeader Component
-function StepHeader<T>({
-  step,
-  stepIndex,
-  onCancel,
-}: {
-  step: WizardStep<T>;
-  stepIndex: number;
-  onCancel: () => void;
-}) {
-  return (
-    <header className={styles["wizard-header"]}>
-      <h2>{`Step ${stepIndex + 1}`}</h2>
-      <div>{step.icon}</div>
-      <button title="Cancel" onClick={onCancel}>
-        ❌
-      </button>
-    </header>
-  );
-}
-
-// StepBody Component
-function StepBody<T>({
-  step,
-  wizardData,
-  onChange,
-  onDateChange,
-  errors,
-}: {
-  step: WizardStep<T>;
-  wizardData: T;
-  onChange: (name: keyof T, value: string) => void;
-  onDateChange: (name: keyof T, value: string) => void;
-  errors: Map<keyof T, string>;
-}) {
-  return (
-    <main className={styles["wizard-body"]}>
-      {step.title}
-      {step.renderBody && step.renderBody(wizardData)}
-      {step.properties &&
-        renderProperties(
-          step.properties,
-          wizardData,
-          onChange,
-          onDateChange,
-          errors
-        )}
-    </main>
-  );
-}
-
-// Render Properties
-function renderProperties<T>(
-  properties: WizardProperty<T>[],
-  wizardData: T,
-  onChange: (name: keyof T, value: string) => void,
-  onDateChange: (name: keyof T, value: string) => void,
-  errors: Map<keyof T, string>
-) {
-  return properties.map((prop) => (
-    <div key={prop.name.toString()} className={styles["wizard-field"]}>
-      <label>
-        {prop.label}
-        {prop.required && (
-          <span className={styles["required-asterisk"]}>*</span>
-        )}
-      </label>
-      {prop.inputType === "select" ? (
-        <select
-          value={(wizardData[prop.name] as string) || ""}
-          onChange={(e) => onChange(prop.name, e.target.value)}
-        >
-          <option value="">Select an option</option>
-          {prop.options?.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      ) : prop.inputType === "date" ? (
-        <input
-          type="date"
-          value={
-            (wizardData[prop.name] as Date)?.toISOString().split("T")[0] ?? ""
-          }
-          onChange={(e) => onDateChange(prop.name, e.target.value)}
-        />
-      ) : (
-        <input
-          type={prop.inputType}
-          placeholder={prop.label}
-          value={(wizardData[prop.name] as string) || ""}
-          onChange={(e) => onChange(prop.name, e.target.value)}
-        />
-      )}
-      {errors.get(prop.name) && (
-        <p className={styles["error-message"]}>{errors.get(prop.name)}</p>
-      )}
-    </div>
-  ));
-}
-
-// StepFooter Component
-function StepFooter({
-  isLastStep,
-  onBack,
-  onNext,
-  isBackDisabled,
-}: {
-  isLastStep: boolean;
-  onBack: () => void;
-  onNext: () => void;
-  isBackDisabled: boolean;
-}) {
-  return (
-    <footer className={styles["wizard-footer"]}>
-      <button
-        onClick={onBack}
-        className={styles["wizard-back"]}
-        disabled={isBackDisabled}
-      >
-        Back
-      </button>
-      <button onClick={onNext} className={styles["wizard-next"]}>
-        {isLastStep ? "Finish" : "Next"}
-      </button>
-    </footer>
   );
 }
 

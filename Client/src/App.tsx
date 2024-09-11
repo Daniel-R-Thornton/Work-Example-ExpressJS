@@ -4,9 +4,11 @@ import Wizard from "./components/Wizard/Wizard";
 import { CreateClientInput } from "./api/types";
 import { useState } from "react";
 import useFundingSources from "./hooks/useFundingSources";
+import { createClient } from "./api/createClient";
 function App() {
   const [showWizard, setShowWizard] = useState(false);
   const { fundingSources, isLoading } = useFundingSources();
+
   return (
     <div>
       <button
@@ -15,16 +17,14 @@ function App() {
           setShowWizard((old) => !old);
         }}
       >
-        ShowMeTheModal
+        Add a client
       </button>
       <Wizard<CreateClientInput>
         onFinish={(data) => {
-          console.log(data);
+          createClient(data);
           setShowWizard(false);
-          // Add logic to submit data to API/database
         }}
         onCancel={() => {
-          console.log("Cancelled");
           setShowWizard(false);
         }}
         showWizard={showWizard}
@@ -55,23 +55,30 @@ function App() {
                 inputType: "select",
                 name: "MainLanguage",
                 label: "Main Language",
-                options: Languages.map((Language) => Language.name),
+                options: Languages.map((Language) => ({
+                  label: Language.name,
+                  value: Language.code,
+                })),
                 required: true,
               },
               {
                 inputType: "select",
                 name: "SecondaryLanguage",
                 label: "Secondary Language",
-                options: Languages.map((Language) => Language.name),
+                options: Languages.map((Language) => ({
+                  label: Language.name,
+                  value: Language.code,
+                })),
                 required: false,
               },
               {
                 inputType: "select",
                 name: "FundingSourceId",
                 label: "Funding Source Name",
-                options: fundingSources.map(
-                  (fundingSource) => fundingSource.name
-                ),
+                options: fundingSources.map((fundingSource) => ({
+                  label: fundingSource.name,
+                  value: fundingSource.id,
+                })),
                 required: true,
               },
             ],
@@ -82,12 +89,28 @@ function App() {
             renderBody: (data) => (
               <div>
                 <p>Name: {data?.Name ?? "unset"}</p>
-                <p>Main Language: {data?.MainLanguage ?? "unset"}</p>
-                <p>Secondary Language: {data?.SecondaryLanguage ?? "unset"}</p>
+                <p>
+                  Main Language:{" "}
+                  {Languages.find(
+                    (Language) => Language.code === data?.MainLanguage
+                  )?.name ?? "unset"}
+                </p>
+                <p>
+                  Secondary Language:{" "}
+                  {Languages.find(
+                    (Language) => Language.code === data?.SecondaryLanguage
+                  )?.name ?? "unset"}
+                </p>
                 <p>
                   Date of Birth: {data?.DateOfBirth?.toDateString() ?? "unset"}
                 </p>
-                <p>Funding Source ID: {data?.FundingSourceId ?? "unset"}</p>
+                <p>
+                  Funding Source Name:{" "}
+                  {fundingSources.find(
+                    (fundingSource) =>
+                      +fundingSource.id === +data?.FundingSourceId
+                  )?.name ?? "unset"}
+                </p>
               </div>
             ),
           },

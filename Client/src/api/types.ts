@@ -13,7 +13,7 @@ export interface CreateClientInput {
   DateOfBirth: Date;
   MainLanguage: string;
   SecondaryLanguage: string;
-  FundingSourceId: number;
+  FundingSourceId: string;
 }
 
 export interface UpdateClientinput {

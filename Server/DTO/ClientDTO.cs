@@ -16,6 +16,7 @@ public class ClientDto
     public string SecondaryLanguage { get; set; }
     [Required]
     public int FundingSourceId { get; set; }
-    public int Id { get; set; }
-    public string FundingSourceName { get; set; }
+    public int? Id { get; set; }
+
+    public string? FundingSourceName { get; set; }
 }
