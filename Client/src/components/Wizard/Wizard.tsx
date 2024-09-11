@@ -1,6 +1,16 @@
 import React, { useState } from "react";
 import styles from "./Wizard.module.css"; // Import the CSS module
 
+/**
+ * Wizard component properties
+ *
+ * @prop {boolean} showWizard - Whether or not to show the wizard
+ * @prop {WizardStep<T>[]} steps - Array of wizard steps
+ * @prop {(data: T) => void} onFinish - Function to call when the wizard is finished
+ * @prop {string} [width=500px] - Width of the wizard
+ * @prop {string} [height=auto] - Height of the wizard
+ * @prop {() => void} onCancel - Function to call when the wizard is cancelled
+ */
 export interface WizardProps<T> {
   showWizard: boolean;
   steps: WizardStep<T>[];
@@ -10,6 +20,14 @@ export interface WizardProps<T> {
   onCancel: () => void;
 }
 
+/**
+ * Individual wizard step properties
+ *
+ * @prop {React.ReactNode} title - Title to display in the header
+ * @prop {React.ReactNode} icon - Icon to display in the header
+ * @prop {WizardProperty<T>[]} [properties] - Array of properties to display in the body
+ * @prop {(data: T) => React.ReactNode} [renderBody] - Function to call to render the body
+ */
 export interface WizardStep<T> {
   title: React.ReactNode;
   icon: React.ReactNode;
@@ -17,6 +35,15 @@ export interface WizardStep<T> {
   renderBody?: (data: T) => React.ReactNode;
 }
 
+/**
+ * Individual property properties
+ *
+ * @prop {keyof T} name - Name of the property
+ * @prop {"text" | "number" | "select" | "date"} inputType - Type of input to display
+ * @prop {string} label - Label to display next to the input
+ * @prop {string[]} [options] - Options to display in a select input
+ * @prop {boolean} [required] - Whether or not the property is required
+ */
 export interface WizardProperty<T> {
   name: keyof T;
   inputType: "text" | "number" | "select" | "date";
@@ -212,7 +239,9 @@ function renderProperties<T>(
       ) : prop.inputType === "date" ? (
         <input
           type="date"
-          value={(wizardData[prop.name] as Date)?.toISOString().split("T")[0]}
+          value={
+            (wizardData[prop.name] as Date)?.toISOString().split("T")[0] ?? ""
+          }
           onChange={(e) => onDateChange(prop.name, e.target.value)}
         />
       ) : (
