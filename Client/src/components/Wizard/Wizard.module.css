@@ -1,0 +1,126 @@
+/* Container for the wizard overlay */
+.wizard-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+/* Main content container */
+.wizard-content {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 100%;
+  overflow: hidden;
+  width: var(--wizard-width);
+  height: var(--wizard-height);
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Header styles */
+.wizard-header {
+  background-color: #f4f4f4;
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wizard-header h2 {
+  font-size: 1.25rem;
+  margin: 0;
+  color: #333;
+}
+
+.wizard-header .icon {
+  font-size: 1.5rem;
+  color: #007bff;
+}
+
+/* Body styles */
+.wizard-body {
+  padding: 16px;
+  flex: 1;
+  overflow-y: auto;
+  color: #333;
+}
+
+.wizard-body input,
+.wizard-body select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  margin-top: 4px;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+}
+
+.wizard-body label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 600;
+  color: #555;
+}
+
+/* Footer styles */
+.wizard-footer {
+  background-color: #f4f4f4;
+  padding: 12px;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wizard-footer button {
+  background-color: #007bff;
+  border: none;
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.wizard-footer button:disabled {
+  background-color: #d6d6d6;
+  cursor: not-allowed;
+}
+
+.wizard-footer button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.wizard-footer .wizard-back {
+  background-color: #6c757d;
+}
+
+.wizard-footer .wizard-back:hover:not(:disabled) {
+  background-color: #5a6268;
+}
+
+/* Keyframes for fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
