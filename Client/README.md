@@ -1,50 +1,136 @@
-# React + TypeScript + Vite
+# Daniel Thornton's Example Project Front End
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Getting Started
 
-Currently, two official plugins are available:
+### Step 1: Clone the Repository
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Clone the repository to your local machine using Git:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+git clone <repository-url>
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Replace `<repository-url>` with the URL of the repository.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+### Step 2: Navigate to the Project Directory and then Client folder
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+Change into the project directory:
+
+```bash
+cd <project-directory>/client
 ```
+
+Replace `<project-directory>` with the name of the directory created by cloning the repository.
+
+### Step 3: Install Dependencies
+
+Install the necessary dependencies for the project using npm or yarn:
+
+```bash
+npm install
+```
+
+or
+
+```bash
+yarn install
+```
+
+### Step 4: Start the Development Server
+
+Start the development server to see the project in action:
+
+```bash
+npm run dev
+```
+
+or
+
+```bash
+yarn dev
+```
+
+## Usage
+
+### Importing the Wizard Component
+
+Import the Wizard component into your React application:
+
+```tsx
+import Wizard from "./path/to/Wizard";
+```
+
+### Defining Steps and Properties
+
+Create an array of steps and properties to configure the wizard:
+
+```tsx
+const steps: WizardStep<MyDataType>[] = [
+  {
+    title: "Step 1",
+    icon: <Icon1 />,
+    properties: [
+      { name: "field1", inputType: "text", label: "Field 1", required: true },
+      // Other properties
+    ],
+  },
+  // Other steps
+];
+```
+
+### Using the Wizard Component
+
+Use the Wizard component in your application:
+
+```tsx
+<Wizard
+  showWizard={true}
+  steps={steps}
+  onFinish={(data) => console.log("Wizard finished with data:", data)}
+  onCancel={() => console.log("Wizard cancelled")}
+  width="600px"
+  height="auto"
+/>
+```
+
+## Components
+
+### Wizard
+
+The main component for the wizard interface.
+
+**Props:**
+
+- `showWizard: boolean` - Determines if the wizard is visible.
+- `steps: WizardStep<T>[]` - Array of steps to be displayed in the wizard.
+- `onFinish: (data: T) => void` - Callback function when the wizard is finished.
+- `width: string` - Optional width of the wizard.
+- `height: string` - Optional height of the wizard.
+- `onCancel: () => void` - Callback function when the wizard is cancelled.
+
+### WizardStep<T>
+
+Defines a step in the wizard.
+
+**Properties:**
+
+- `title: React.ReactNode` - Title of the step.
+- `icon: React.ReactNode` - Icon for the step.
+- `properties: WizardProperty<T>[]` - Array of properties for the step.
+- `renderBody: (data: T) => React.ReactNode` - Function to render additional content in the step.
+
+### WizardProperty<T>
+
+Defines a property within a wizard step.
+
+**Properties:**
+
+- `name: keyof T` - Property name.
+- `inputType: "text" | "number" | "select" | "date"` - Type of input.
+- `label: string` - Label for the input field.
+- `options: { value: string; label: string }[]` - Options for select inputs.
+- `required: boolean` - Indicates if the field is required.
+
+### AddClientWizardButton
+
+Adds a button with and a pre-configuires wizard to allow users to simply click the button to get a client creation wizard.

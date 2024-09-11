@@ -1,5 +1,11 @@
 # Daniel Thornton's Example Project
 
+## further information
+
+### front end Readme:
+
+[More details about the front end can be found here](https://github.com/Daniel-R-Thornton/Work-Example/tree/main/Client)
+
 ## Getting Started
 
 ### Requirements
