@@ -16,6 +16,11 @@ services:
       - db_data:/var/lib/mysql
     networks:
       - mynet
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   server:
     build:
@@ -26,9 +31,12 @@ services:
     environment:
       DATABASE_URL: mysql://user:user_password@db/clientdb
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - mynet
+       
+    
 
   frontend:
     build:

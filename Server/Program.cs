@@ -7,14 +7,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-// Generate the connection string
+//generate the connection string
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Add the database connection
+//add the database connection
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-// Configure CORS
+
+//disable cors for localhost
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins",
@@ -26,20 +27,24 @@ builder.Services.AddCors(options =>
         });
 });
 
+
+
 var app = builder.Build();
 
-// Apply migrations on the first run
+
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var services = scope.ServiceProvider;
+    var dbContext = services.GetRequiredService<AppDbContext>();
 
-    // Check if the database is already created
-    if (!dbContext.Database.CanConnect())
+    if (dbContext.Database.GetPendingMigrations().Any())
     {
-        // Run the migrations to set up the database
         dbContext.Database.Migrate();
     }
 }
+
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -49,8 +54,14 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
+
 app.UseCors("AllowSpecificOrigins");
 app.UseHttpsRedirection();
 app.MapControllers();
 
+
+
 app.Run();
+
+
+
