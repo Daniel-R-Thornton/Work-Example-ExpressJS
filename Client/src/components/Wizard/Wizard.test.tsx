@@ -18,7 +18,14 @@ describe("Wizard Component", () => {
   ];
 
   it("should render the wizard when showWizard is true", () => {
-    render(<Wizard showWizard={true} steps={steps} onFinish={() => {}} />);
+    render(
+      <Wizard
+        onCancel={() => {}}
+        showWizard={true}
+        steps={steps}
+        onFinish={() => {}}
+      />
+    );
 
     // Check if the wizard is present in the document
     expect(screen.getByRole("dialog")).toBeInTheDocument();
@@ -31,14 +38,28 @@ describe("Wizard Component", () => {
   });
 
   it("should not render the wizard when showWizard is false", () => {
-    render(<Wizard showWizard={false} steps={steps} onFinish={() => {}} />);
+    render(
+      <Wizard
+        onCancel={() => {}}
+        showWizard={false}
+        steps={steps}
+        onFinish={() => {}}
+      />
+    );
 
     // The wizard should not be present when showWizard is false
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
   it("should handle navigation to the next step", () => {
-    render(<Wizard showWizard={true} steps={steps} onFinish={() => {}} />);
+    render(
+      <Wizard
+        onCancel={() => {}}
+        showWizard={true}
+        steps={steps}
+        onFinish={() => {}}
+      />
+    );
 
     // Click the "Next" button to go to the next step
     fireEvent.click(screen.getByText("Next"));
@@ -53,7 +74,14 @@ describe("Wizard Component", () => {
 
   it("should call onFinish when finishing the wizard", () => {
     const onFinish = vi.fn();
-    render(<Wizard showWizard={true} steps={steps} onFinish={onFinish} />);
+    render(
+      <Wizard
+        onCancel={() => {}}
+        showWizard={true}
+        steps={steps}
+        onFinish={onFinish}
+      />
+    );
 
     // Click the "Next" button to go to the last step
     fireEvent.click(screen.getByText("Next"));
@@ -65,7 +93,14 @@ describe("Wizard Component", () => {
   });
 
   it("should handle the back navigation", () => {
-    render(<Wizard showWizard={true} steps={steps} onFinish={() => {}} />);
+    render(
+      <Wizard
+        onCancel={() => {}}
+        showWizard={true}
+        steps={steps}
+        onFinish={() => {}}
+      />
+    );
 
     // Click the "Next" button to go to the next step
     fireEvent.click(screen.getByText("Next"));
@@ -79,14 +114,28 @@ describe("Wizard Component", () => {
   });
 
   it("should disable the back button on the first step", () => {
-    render(<Wizard showWizard={true} steps={steps} onFinish={() => {}} />);
+    render(
+      <Wizard
+        onCancel={() => {}}
+        showWizard={true}
+        steps={steps}
+        onFinish={() => {}}
+      />
+    );
 
     // Check if the "Back" button is disabled on the first step
     expect(screen.getByText("Back")).toBeDisabled();
   });
 
   it("should disable the next button on the last step", () => {
-    render(<Wizard showWizard={true} steps={steps} onFinish={() => {}} />);
+    render(
+      <Wizard
+        onCancel={() => {}}
+        showWizard={true}
+        steps={steps}
+        onFinish={() => {}}
+      />
+    );
 
     // Click the "Next" button to go to the second step
     fireEvent.click(screen.getByText("Next"));

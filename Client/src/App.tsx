@@ -1,14 +1,16 @@
 import "./App.css";
 import { Languages } from "./assets/Languages";
 import Wizard from "./components/Wizard/Wizard";
-import { CreateClientInput } from "./types";
+import { CreateClientInput } from "./api/types";
 import { useState } from "react";
-
+import useFundingSources from "./hooks/useFundingSources";
 function App() {
   const [showWizard, setShowWizard] = useState(false);
+  const { fundingSources, isLoading } = useFundingSources();
   return (
     <div>
       <button
+        disabled={isLoading}
         onClick={() => {
           setShowWizard((old) => !old);
         }}
@@ -54,7 +56,6 @@ function App() {
                 name: "MainLanguage",
                 label: "Main Language",
                 options: Languages.map((Language) => Language.name),
-
                 required: true,
               },
               {
@@ -65,9 +66,12 @@ function App() {
                 required: false,
               },
               {
-                inputType: "number",
+                inputType: "select",
                 name: "FundingSourceId",
-                label: "Funding Source ID",
+                label: "Funding Source Name",
+                options: fundingSources.map(
+                  (fundingSource) => fundingSource.name
+                ),
                 required: true,
               },
             ],
