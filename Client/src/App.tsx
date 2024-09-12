@@ -1,11 +1,11 @@
 import "./App.css";
-import AddClientWizardButton from "./components/AddClientWizardButton/AddClientWizardButton";
+import ClientList from "./components/ClientList/ClientList";
 
 function App() {
   return (
     <div>
       <>
-        <AddClientWizardButton />
+        <ClientList />
       </>
     </div>
   );

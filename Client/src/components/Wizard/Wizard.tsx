@@ -74,6 +74,9 @@ export function Wizard<T>({
         setCurrentStep((prevStep) => prevStep + 1);
       } else {
         onFinish(wizardData);
+        setCurrentStep(0);
+
+        setWizardData({} as T);
       }
     }
   };

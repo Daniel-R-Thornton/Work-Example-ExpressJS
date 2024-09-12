@@ -1,0 +1,76 @@
+/* Container for the client list */
+.container {
+  padding: 1rem;
+  margin: 1rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Header styles */
+.header {
+  background-color: #f4f4f4;
+  padding: 16px;
+  border-bottom: 2px solid #e0e0e0;
+  font-size: 1.5rem;
+  color: #333;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* List container styles */
+.clientList {
+  padding: 16px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Client item styles */
+
+.clientItemHeader,
+.clientItem {
+  padding: 8px;
+  border-radius: 1px;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #f9f9f9;
+  color: #333;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.clientItem:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.clientItemHeader {
+  font-weight: bold;
+  font-size: 1.2rem;
+  background-color: #e0e0e0;
+  color: #333;
+  border-top: 2px solid #e0e0e0;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+/* Keyframes for fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+li {
+  list-style: none;
+}

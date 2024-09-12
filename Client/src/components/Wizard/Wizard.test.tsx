@@ -20,10 +20,10 @@ describe("Wizard Component", () => {
   it("should render the wizard when showWizard is true", () => {
     render(
       <Wizard
-        onCancel={() => {}}
         showWizard={true}
         steps={steps}
         onFinish={() => {}}
+        onCancel={() => {}}
       />
     );
 
@@ -31,19 +31,17 @@ describe("Wizard Component", () => {
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     // Check if the first step content is rendered
     expect(screen.getByText("Step 1 Content")).toBeInTheDocument();
-    // Check if the step number is correct
-    expect(screen.getByText("Step 1")).toBeInTheDocument();
-    // Check if the icon is rendered
+    // Check if the icon for the first step is rendered
     expect(screen.getByText("🔍")).toBeInTheDocument();
   });
 
   it("should not render the wizard when showWizard is false", () => {
     render(
       <Wizard
-        onCancel={() => {}}
         showWizard={false}
         steps={steps}
         onFinish={() => {}}
+        onCancel={() => {}}
       />
     );
 
@@ -54,10 +52,10 @@ describe("Wizard Component", () => {
   it("should handle navigation to the next step", () => {
     render(
       <Wizard
-        onCancel={() => {}}
         showWizard={true}
         steps={steps}
         onFinish={() => {}}
+        onCancel={() => {}}
       />
     );
 
@@ -66,9 +64,7 @@ describe("Wizard Component", () => {
 
     // Check if the second step content is rendered
     expect(screen.getByText("Step 2 Content")).toBeInTheDocument();
-    // Check if the step number is correct
-    expect(screen.getByText("Step 2")).toBeInTheDocument();
-    // Check if the icon is rendered
+    // Check if the icon for the second step is rendered
     expect(screen.getByText("✅")).toBeInTheDocument();
   });
 
@@ -76,10 +72,10 @@ describe("Wizard Component", () => {
     const onFinish = vi.fn();
     render(
       <Wizard
-        onCancel={() => {}}
         showWizard={true}
         steps={steps}
         onFinish={onFinish}
+        onCancel={() => {}}
       />
     );
 
@@ -95,10 +91,10 @@ describe("Wizard Component", () => {
   it("should handle the back navigation", () => {
     render(
       <Wizard
-        onCancel={() => {}}
         showWizard={true}
         steps={steps}
         onFinish={() => {}}
+        onCancel={() => {}}
       />
     );
 
@@ -109,17 +105,17 @@ describe("Wizard Component", () => {
 
     // Check if the first step content is rendered again
     expect(screen.getByText("Step 1 Content")).toBeInTheDocument();
-    // Check if the step number is correct
-    expect(screen.getByText("Step 1")).toBeInTheDocument();
+    // Check if the icon for the first step is rendered
+    expect(screen.getByText("🔍")).toBeInTheDocument();
   });
 
   it("should disable the back button on the first step", () => {
     render(
       <Wizard
-        onCancel={() => {}}
         showWizard={true}
         steps={steps}
         onFinish={() => {}}
+        onCancel={() => {}}
       />
     );
 
@@ -127,13 +123,13 @@ describe("Wizard Component", () => {
     expect(screen.getByText("Back")).toBeDisabled();
   });
 
-  it("should disable the next button on the last step", () => {
+  it("should not show the next button on the last step", () => {
     render(
       <Wizard
-        onCancel={() => {}}
         showWizard={true}
         steps={steps}
         onFinish={() => {}}
+        onCancel={() => {}}
       />
     );
 

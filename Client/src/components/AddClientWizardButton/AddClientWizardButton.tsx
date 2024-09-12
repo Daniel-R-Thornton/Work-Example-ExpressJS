@@ -10,15 +10,16 @@ import { createClient } from "../../api/createClient";
  * @description A wizard for adding a new client.
  * @returns {JSX.Element} The rendered wizard.
  */
-export function AddClientWizardButton() {
+export function AddClientWizardButton({ onFinish }: { onFinish?: () => void }) {
   const [showWizard, setShowWizard] = useState(false);
   const { fundingSources, isLoading } = useFundingSources();
 
   return (
     <>
       <Wizard<CreateClientInput>
-        onFinish={(data) => {
-          createClient(data);
+        onFinish={async (data) => {
+          await createClient(data);
+          onFinish?.();
           setShowWizard(false);
         }}
         onCancel={() => {
@@ -32,13 +33,13 @@ export function AddClientWizardButton() {
             properties: [
               {
                 inputType: "text",
-                name: "Name",
+                name: "name",
                 label: "Name",
                 required: true,
               },
               {
                 inputType: "date",
-                name: "DateOfBirth",
+                name: "dateOfBirth",
                 label: "Date of Birth",
                 required: true,
               },
@@ -50,7 +51,7 @@ export function AddClientWizardButton() {
             properties: [
               {
                 inputType: "select",
-                name: "MainLanguage",
+                name: "mainLanguage",
                 label: "Main Language",
                 options: Languages.map((Language) => ({
                   label: Language.name,
@@ -60,7 +61,7 @@ export function AddClientWizardButton() {
               },
               {
                 inputType: "select",
-                name: "SecondaryLanguage",
+                name: "secondaryLanguage",
                 label: "Secondary Language",
                 options: Languages.map((Language) => ({
                   label: Language.name,
@@ -70,11 +71,11 @@ export function AddClientWizardButton() {
               },
               {
                 inputType: "select",
-                name: "FundingSourceId",
+                name: "fundingSourceId",
                 label: "Funding Source Name",
                 options: fundingSources.map((fundingSource) => ({
                   label: fundingSource.name,
-                  value: fundingSource.id,
+                  value: fundingSource.id.toString(),
                 })),
                 required: true,
               },
@@ -85,27 +86,27 @@ export function AddClientWizardButton() {
             icon: "✅",
             renderBody: (data) => (
               <div>
-                <p>Name: {data?.Name ?? "unset"}</p>
+                <p>Name: {data?.name ?? "unset"}</p>
                 <p>
                   Main Language:{" "}
                   {Languages.find(
-                    (Language) => Language.code === data?.MainLanguage
+                    (Language) => Language.code === data?.mainLanguage
                   )?.name ?? "unset"}
                 </p>
                 <p>
                   Secondary Language:{" "}
                   {Languages.find(
-                    (Language) => Language.code === data?.SecondaryLanguage
+                    (Language) => Language.code === data?.secondaryLanguage
                   )?.name ?? "unset"}
                 </p>
                 <p>
-                  Date of Birth: {data?.DateOfBirth?.toDateString() ?? "unset"}
+                  Date of Birth: {data?.dateOfBirth?.toDateString() ?? "unset"}
                 </p>
                 <p>
                   Funding Source Name:{" "}
                   {fundingSources.find(
                     (fundingSource) =>
-                      +fundingSource.id === +data?.FundingSourceId
+                      +fundingSource.id === +data?.fundingSourceId
                   )?.name ?? "unset"}
                 </p>
               </div>
@@ -116,7 +117,6 @@ export function AddClientWizardButton() {
       <button onClick={() => setShowWizard(true)} disabled={isLoading}>
         Add Client
       </button>
-      .
     </>
   );
 }

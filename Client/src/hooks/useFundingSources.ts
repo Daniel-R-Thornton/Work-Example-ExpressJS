@@ -10,13 +10,11 @@ export default function useFundingSources() {
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
-    console.log("fetching");
     // Start the asynchronous operation
     fetchFundingSource(signal)
       .then((response) => {
         setFundingSources(response);
         setIsLoading(false);
-        console.log("fetched");
       })
       .catch((error) => {
         setError(error);
@@ -25,7 +23,7 @@ export default function useFundingSources() {
 
     return () => {
       // Abort the request when the component unmounts or when a dependency changes
-      controller.abort();
+      controller.abort("aborting");
     };
   }, []);
 

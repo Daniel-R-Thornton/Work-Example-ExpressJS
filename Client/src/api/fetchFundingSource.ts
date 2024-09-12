@@ -11,9 +11,11 @@ export const fetchFundingSource = async (
       throw new Error("Network response was not ok");
     }
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
+    if ((error as string).includes("aborting")) {
+      return [];
+    }
     console.error("Error fetching funding Sources:", error);
     return [];
   }
