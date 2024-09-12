@@ -129,3 +129,7 @@ To keep the application easy to set up and get running, migrations run automatic
 ### Crud Functionality
 
 There is no implementation on the front end for the deletion , or updating of clients, this was done as the task specifically mentioned "reate a simple React and TypeScript front end to list and create clients using the above API" and i wanted to meets the tasks requirements as closely as possible.
+
+## Secondary Language Is assumed to be once option
+The secondary language is assumed to be one language choice, changing this to accept a range would be relatively simple with a minor changes to the back and front end.
+
