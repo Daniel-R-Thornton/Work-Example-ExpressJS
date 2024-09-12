@@ -1,5 +1,5 @@
 /* Container for the wizard overlay */
-.wizard-overlay {
+.wizardOverlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -8,16 +8,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  height: 100vh;
   z-index: 1000;
 }
 
 /* Main content container */
-.wizard-content {
+.wizardContent {
   background-color: #ffffff;
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   max-width: 100%;
   overflow: hidden;
@@ -29,8 +30,8 @@
 }
 
 /* Header styles */
-.wizard-header {
-  background-color: #f4f4f4;
+.wizardHeader {
+  background-color: #f7f7f7;
   padding: 16px;
   border-bottom: 1px solid #e0e0e0;
   display: flex;
@@ -38,27 +39,28 @@
   align-items: center;
 }
 
-.wizard-header h2 {
+.wizardHeader h2 {
   font-size: 1.25rem;
   margin: 0;
   color: #333;
+  font-weight: 600;
 }
 
-.wizard-header .icon {
+.wizardHeader .icon {
   font-size: 1.5rem;
   color: #007bff;
 }
 
 /* Body styles */
-.wizard-body {
+.wizardBody {
   padding: 16px;
   flex: 1;
   overflow-y: auto;
   color: #333;
 }
 
-.wizard-body input,
-.wizard-body select {
+.wizardBody input,
+.wizardBody select {
   width: 100%;
   padding: 8px;
   border: 1px solid #e0e0e0;
@@ -66,18 +68,25 @@
   margin-top: 4px;
   margin-bottom: 12px;
   box-sizing: border-box;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
 }
 
-.wizard-body label {
+.wizardBody label {
   display: block;
   margin-bottom: 4px;
   font-weight: 600;
   color: #555;
 }
 
+.wizardBody input:focus,
+.wizardBody select:focus {
+  border-color: #007bff;
+}
+
 /* Footer styles */
-.wizard-footer {
-  background-color: #f4f4f4;
+.wizardFooter {
+  background-color: #f7f7f7;
   padding: 12px;
   border-top: 1px solid #e0e0e0;
   display: flex;
@@ -85,7 +94,7 @@
   align-items: center;
 }
 
-.wizard-footer button {
+.wizardFooter button {
   background-color: #007bff;
   border: none;
   color: #ffffff;
@@ -96,20 +105,20 @@
   transition: background-color 0.3s ease;
 }
 
-.wizard-footer button:disabled {
+.wizardFooter button:disabled {
   background-color: #d6d6d6;
   cursor: not-allowed;
 }
 
-.wizard-footer button:hover:not(:disabled) {
+.wizardFooter button:hover:not(:disabled) {
   background-color: #0056b3;
 }
 
-.wizard-footer .wizard-back {
+.wizardFooter .wizardBack {
   background-color: #6c757d;
 }
 
-.wizard-footer .wizard-back:hover:not(:disabled) {
+.wizardFooter .wizardBack:hover:not(:disabled) {
   background-color: #5a6268;
 }
 
@@ -125,17 +134,27 @@
   }
 }
 
-.wizard-next:disabled {
+.wizardNext:disabled {
   background-color: #c6c6c6;
   cursor: not-allowed;
 }
 
-.required-asterisk {
+.requiredAsterisk {
   color: red;
   margin-left: 4px;
 }
 
-.error-message {
+.errorMessage {
   color: red;
   font-size: 0.875rem;
+}
+
+.wizardCancel {
+  background-color: #6c757d;
+  border: none;
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
 }

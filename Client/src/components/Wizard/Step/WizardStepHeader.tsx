@@ -19,11 +19,15 @@ export function StepHeader<T>({
   onCancel: () => void;
 }) {
   return (
-    <header className={styles["wizard-header"]}>
+    <header className={styles["wizardHeader"]}>
       <h2>{`Step ${stepIndex + 1}`}</h2>
       <div>{step.icon}</div>
-      <button title="Cancel" onClick={onCancel}>
-        ❌
+      <button
+        title="Cancel"
+        onClick={onCancel}
+        className={styles["wizardCancel"]}
+      >
+        X
       </button>
     </header>
   );

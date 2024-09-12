@@ -116,7 +116,11 @@ export function AddClientWizardButton({ onFinish }: { onFinish?: () => void }) {
           },
         ]}
       />
-      <button onClick={() => setShowWizard(true)} disabled={isLoading}>
+      <button
+        onClick={() => setShowWizard(true)}
+        disabled={isLoading}
+        className={styles.addClientWizardButton}
+      >
         Add Client
       </button>
     </>

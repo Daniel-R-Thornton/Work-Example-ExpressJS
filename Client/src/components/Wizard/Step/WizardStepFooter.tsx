@@ -23,15 +23,15 @@ export function StepFooter({
   finalStepButtonText?: string;
 }) {
   return (
-    <footer className={styles["wizard-footer"]}>
+    <footer className={styles["wizardFooter"]}>
       <button
         onClick={onBack}
-        className={styles["wizard-back"]}
+        className={styles["wizardBack"]}
         disabled={isBackDisabled}
       >
         Back
       </button>
-      <button onClick={onNext} className={styles["wizard-next"]}>
+      <button onClick={onNext} className={styles["wizardNext"]}>
         {isLastStep ? finalStepButtonText : "Next"}
       </button>
     </footer>

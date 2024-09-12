@@ -39,6 +39,13 @@ export default function ClientList() {
             </div>
           </li>
         ))}
+        {clients.length === 0 && (
+          <li className={styles.noClientsItem}>
+            <div>
+              No clients found click on the "Add Client" button to get started!
+            </div>
+          </li>
+        )}
       </ul>
     </div>
   );

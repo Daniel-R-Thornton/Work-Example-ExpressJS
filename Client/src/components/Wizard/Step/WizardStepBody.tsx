@@ -25,7 +25,7 @@ function WizardStepBody<T>({
   errors: Map<keyof T, string>;
 }) {
   return (
-    <main className={styles["wizard-body"]}>
+    <main className={styles["wizardBody"]}>
       {step.title}
       {step.renderBody && step.renderBody(wizardData)}
       {step.properties &&
@@ -105,14 +105,14 @@ function renderProperties<T>(
     };
 
     return (
-      <div key={name as string} className={styles["wizard-field"]}>
+      <div key={name as string} className={styles["wizardField"]}>
         <label>
           {label}
-          {required && <span className={styles["required-asterisk"]}>*</span>}
+          {required && <span className={styles["requiredAsterisk"]}>*</span>}
         </label>
         {renderInput()}
         {errors.get(name) && (
-          <p className={styles["error-message"]}>{errors.get(name)}</p>
+          <p className={styles["errorMessage"]}>{errors.get(name)}</p>
         )}
       </div>
     );

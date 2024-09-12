@@ -44,6 +44,13 @@ export function Wizard<T>({
 
   if (!showWizard) return null;
 
+  //wrap the on cancel function in a callback function to clear the form state
+  const handleCancel = () => {
+    onCancel();
+    setCurrentStep(0);
+    setWizardData({} as T);
+  };
+
   const validateStep = () => {
     const stepProperties = steps[currentStep]?.properties || [];
     const newErrors = new Map<keyof T, string>();
@@ -77,7 +84,6 @@ export function Wizard<T>({
       } else {
         onFinish(wizardData);
         setCurrentStep(0);
-
         setWizardData({} as T);
       }
     }
@@ -110,18 +116,18 @@ export function Wizard<T>({
   return (
     <dialog
       open={showWizard}
-      className={styles["wizard-overlay"]}
+      className={styles["wizardOverlay"]}
       onClick={onCancel}
     >
       <div
-        className={styles["wizard-content"]}
+        className={styles["wizardContent"]}
         style={{ width, height }}
         onClick={(e) => e.stopPropagation()}
       >
         <WizardStepHeader
           step={currentStepData}
           stepIndex={currentStep}
-          onCancel={onCancel}
+          onCancel={handleCancel}
         />
         <WizardStepBody
           step={currentStepData}
