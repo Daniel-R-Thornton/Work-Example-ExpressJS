@@ -21,7 +21,7 @@ And a configured copy of Git:
 Clone the repository to your local machine using Git:
 
 ```bash
-git clone https://github.com/Daniel-R-Thornton/Work-Example.git
+git clone <repository-url>
 ```
 
 ### Step 2: Navigate to the Directory You Cloned Into
