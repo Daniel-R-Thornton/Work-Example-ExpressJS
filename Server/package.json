@@ -2,12 +2,17 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsx src/app.ts",
+    "build": "tsc",
+    "prestart": "npm run build",
+    "init-db": "tsx src/utils/intitialiseDatabaseData.ts"
   },
   "keywords": [],
-  "author": "",
+  "author": "Daniel Thorton",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.3",
@@ -19,7 +24,8 @@
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^22.5.4",
-    "ts-node": "^10.9.2",
+    "@types/sequelize": "^4.28.20",
+    "tsx": "^4.19.0",
     "typescript": "^5.6.2"
   }
 }

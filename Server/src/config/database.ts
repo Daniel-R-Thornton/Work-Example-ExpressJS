@@ -5,3 +5,5 @@ const sequelize = new Sequelize("clientdb", "user", "user_password", {
   host: "db",
   dialect: "mysql",
 });
+
+export default sequelize;
