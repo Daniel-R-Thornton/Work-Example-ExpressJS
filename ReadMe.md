@@ -126,6 +126,6 @@ To keep the implementation and review of the code quick and easy, queries do not
 
 To keep the application easy to set up and get running, migrations run automatically the first time you run the application. This creates the tables in the database as well as all of the default funding types.
 
-### Crud Fucntionality
+### Crud Functionality
 
 There is no implementation on the front end for the deletion , or updating of clients, this was done as the task specifically mentioned "reate a simple React and TypeScript front end to list and create clients using the above API" and i wanted to meets the tasks requirements as closely as possible.
