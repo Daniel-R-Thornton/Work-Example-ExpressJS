@@ -14,11 +14,13 @@ export function StepFooter({
   onBack,
   onNext,
   isBackDisabled,
+  finalStepButtonText = "Finish",
 }: {
   isLastStep: boolean;
   onBack: () => void;
   onNext: () => void;
   isBackDisabled: boolean;
+  finalStepButtonText?: string;
 }) {
   return (
     <footer className={styles["wizard-footer"]}>
@@ -30,7 +32,7 @@ export function StepFooter({
         Back
       </button>
       <button onClick={onNext} className={styles["wizard-next"]}>
-        {isLastStep ? "Finish" : "Next"}
+        {isLastStep ? finalStepButtonText : "Next"}
       </button>
     </footer>
   );

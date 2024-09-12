@@ -4,6 +4,7 @@ import { CreateClientInput } from "../../api/types";
 import { useState } from "react";
 import useFundingSources from "../../hooks/useFundingSources";
 import { createClient } from "../../api/createClient";
+import styles from "./AddClientWizardButton.module.css";
 
 /**
  * @function AddClientWizard
@@ -17,6 +18,7 @@ export function AddClientWizardButton({ onFinish }: { onFinish?: () => void }) {
   return (
     <>
       <Wizard<CreateClientInput>
+        finalStepButtonText="Add Client"
         onFinish={async (data) => {
           await createClient(data);
           onFinish?.();
@@ -85,7 +87,7 @@ export function AddClientWizardButton({ onFinish }: { onFinish?: () => void }) {
             title: "Confirm Details",
             icon: "✅",
             renderBody: (data) => (
-              <div>
+              <div className={styles.finalStageBody}>
                 <p>Name: {data?.name ?? "unset"}</p>
                 <p>
                   Main Language:{" "}

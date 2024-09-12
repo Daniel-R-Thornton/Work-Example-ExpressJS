@@ -11,6 +11,7 @@ export interface WizardProps<T> {
   width?: string;
   height?: string;
   onCancel: () => void;
+  finalStepButtonText?: string;
 }
 
 export interface WizardStep<T> {
@@ -35,6 +36,7 @@ export function Wizard<T>({
   showWizard,
   steps,
   onCancel,
+  finalStepButtonText = "Finish",
 }: WizardProps<T>) {
   const [currentStep, setCurrentStep] = useState(0);
   const [wizardData, setWizardData] = useState<T>({} as T);
@@ -133,6 +135,7 @@ export function Wizard<T>({
           onBack={handleBack}
           onNext={handleNext}
           isBackDisabled={currentStep === 0}
+          finalStepButtonText={finalStepButtonText}
         />
       </div>
     </dialog>
