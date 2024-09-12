@@ -31,14 +31,6 @@ export const createClientHandler = async (req: Request, res: Response) => {
       fundingSourceId,
     } = req.body;
 
-    console.log(req.body);
-    console.log(
-      name,
-      dateOfBirth,
-      mainLanguage,
-      secondaryLanguage,
-      fundingSourceId
-    );
     // Basic validation
     if (!name || !dateOfBirth || !mainLanguage || !fundingSourceId) {
       return res.status(400).json({ error: "Missing required fields" });
