@@ -4,7 +4,7 @@
 
 ### Frontend README:
 
-[More details about the frontend can be found here](https://github.com/Daniel-R-Thornton/Work-Example/tree/main/Client)
+[More details about the frontend can be found here](https://github.com/Daniel-R-Thornton/Work-Example-ExpressJS/tree/main/Client)
 
 ## Getting Started
 
